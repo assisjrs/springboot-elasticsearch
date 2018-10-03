@@ -9,7 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static com.jayway.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(SpringRunner.class)
@@ -83,7 +82,7 @@ public class SearchContractTest {
                        .body("{\"text\": \"CSMGA1\"}")
                        .post(url("/search/"))
                 .then()
-                .extract().jsonPath().getString("results[0].search.codigoCetip");
+                .extract().jsonPath().getString("results[0].search.codigo");
 
         assertThat(codigoCetip).isEqualTo("CSMGA1");
     }

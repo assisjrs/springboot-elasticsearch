@@ -13,11 +13,9 @@ public class SimpleSearch {
     private SimpleSearchResultsExtractor resultsExtractor;
 
     public ResultsResponse by(final String q) {
-        final ResultsResponse results = new ResultsResponse();
+        final ResultsResponse results = template.query(null, resultsExtractor);
 
-        //final Search search = template.query(null, resultsExtractor);
-
-        //results.setFound(search != null);
+        results.setFound(results != null);
 
         return results;
     }

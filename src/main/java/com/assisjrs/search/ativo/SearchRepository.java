@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SearchRepository extends ElasticsearchRepository<Search, String> {
-    Search findByCodigoCetip(String codigoCetip);
+    Search findByCodigo(String codigo);
 }

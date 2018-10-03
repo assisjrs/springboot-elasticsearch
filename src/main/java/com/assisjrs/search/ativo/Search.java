@@ -16,7 +16,7 @@ public class Search {
     private String id;
     private String descricao;
 
-    private String codigoCetip;
+    private String codigo;
 
     @DateTimeFormat(iso = DATE)
     private Date vencimento;

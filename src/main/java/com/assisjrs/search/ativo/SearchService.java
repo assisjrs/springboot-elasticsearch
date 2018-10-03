@@ -9,8 +9,8 @@ public class SearchService {
     @Autowired
     private SearchRepository repository;
 
-    public Search findByCodigoCetip(String codigoCetip) {
-        return repository.findByCodigoCetip(codigoCetip);
+    public Search findByCodigo(String codigo) {
+        return repository.findByCodigo(codigo);
     }
 
     public Search salvar(Search s) {

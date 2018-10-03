@@ -21,7 +21,7 @@ public class SearchResultImpl implements SearchResultMapper {
             final Search search = new Search();
 
             search.setId(hit.getId());
-            search.setCodigoCetip((String)hit.getSource().get("codigoCetip"));
+            search.setCodigo((String)hit.getSource().get("codigo"));
             search.setDescricao((String)hit.getSource().get("descricao"));
             searches.add(search);
         }

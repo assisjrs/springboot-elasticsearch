@@ -1,7 +1,6 @@
 package com.assisjrs.search.unit;
 
 import com.assisjrs.search.ativo.ResultsResponse;
-import com.assisjrs.search.ativo.Search;
 import com.assisjrs.search.ativo.SimpleSearch;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +23,7 @@ public class SimpleSearchByDescricaoUnitTests {
 
 	@Test
 	public void naoDeveRetornarNullQuandoSemResultados(){
+        when(template.query(any(), any())).thenReturn(new ResultsResponse());
 		final ResultsResponse results = search.by("NAO_EXISTE");
 
 		assertThat(results).isNotNull();
@@ -31,23 +31,19 @@ public class SimpleSearchByDescricaoUnitTests {
 
     @Test
     public void deveRetornarFoundComoFalseQuandoSemResultados(){
+	    final ResultsResponse response = new ResultsResponse();
+
+        response.setFound(false);
+
+        when(template.query(any(), any())).thenReturn(response);
         final ResultsResponse results = search.by("NAO_EXISTE");
 
         assertThat(results.isFound()).isFalse();
     }
 
     @Test
-    public void deveRetornarFoundComoTrueQuandoComResultados(){
-        when(template.query(any(), any())).thenReturn(new Search());
-
-        final ResultsResponse results = search.by("EPL4");
-
-        assertThat(results.isFound()).isTrue();
-    }
-
-    @Test
     public void deveRetornarTook(){
-        when(template.query(any(), any())).thenReturn(new Search());
+        when(template.query(any(), any())).thenReturn(new ResultsResponse());
 
         final ResultsResponse results = search.by("EPL4");
 

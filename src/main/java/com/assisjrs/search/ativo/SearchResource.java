@@ -17,7 +17,7 @@ public class SearchResource {
         final Search search = new Search();
 
         search.setId("1");
-        search.setCodigoCetip("CSMGA1");
+        search.setCodigo("CSMGA1");
         search.setDescricao("xyz");
 
         response.getResults().add(new ResultSearch(null, null, null, null, search));

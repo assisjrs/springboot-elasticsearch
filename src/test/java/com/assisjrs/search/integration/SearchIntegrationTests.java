@@ -51,7 +51,7 @@ public class SearchIntegrationTests {
 
 	@Test
 	public void deveRetornarNullQuandoSemResultados(){
-        final Search search = service.findByCodigoCetip("NAO_EXISTE");
+        final Search search = service.findByCodigo("NAO_EXISTE");
 
         assertThat(search).isNull();
     }
@@ -61,7 +61,7 @@ public class SearchIntegrationTests {
 	    final Search s = new Search();
 
 	    s.setId("666");
-	    s.setCodigoCetip("ELPLA1");
+	    s.setCodigo("ELPLA1");
 	    s.setDescricao("xyz");
 
 
@@ -75,14 +75,14 @@ public class SearchIntegrationTests {
         final Search s = new Search();
 
         s.setId("333");
-        s.setCodigoCetip("ELPLA1");
+        s.setCodigo("ELPLA1");
         s.setDescricao("xyz");
 
         service.salvar(s);
 
-        final Search found = service.findByCodigoCetip("ELPLA1");
+        final Search found = service.findByCodigo("ELPLA1");
 
-        assertThat(found.getCodigoCetip()).isEqualTo("ELPLA1");
+        assertThat(found.getCodigo()).isEqualTo("ELPLA1");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class SearchIntegrationTests {
         final Search s = new Search();
 
         s.setId(randomNumeric(5));
-        s.setCodigoCetip("ELPLA1");
+        s.setCodigo("ELPLA1");
         s.setDescricao("some test message");
 
         final IndexQuery indexQuery = getIndexQuery(s);
@@ -130,7 +130,7 @@ public class SearchIntegrationTests {
         final Search s = new Search();
 
         s.setId(randomNumeric(5));
-        s.setCodigoCetip("ELPLA1");
+        s.setCodigo("ELPLA1");
         s.setDescricao("some test message");
 
         final IndexQuery indexQuery = getIndexQuery(s);
@@ -159,7 +159,7 @@ public class SearchIntegrationTests {
         final Search s = new Search();
 
         s.setId(randomNumeric(5));
-        s.setCodigoCetip("ELPLA1");
+        s.setCodigo("ELPLA1");
         s.setDescricao("some test message");
 
         final IndexQuery indexQuery = getIndexQuery(s);
@@ -189,7 +189,7 @@ public class SearchIntegrationTests {
                     final Search search = new Search();
 
                     search.setId(hit.getId());
-                    search.setCodigoCetip((String)hit.getSource().get("codigoCetip"));
+                    search.setCodigo((String)hit.getSource().get("codigo"));
                     search.setDescricao(hit.getHighlightFields().get("descricao").fragments()[0].toString());
                     searches.add(search);
                 }

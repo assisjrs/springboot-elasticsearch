@@ -25,12 +25,12 @@ public class SearchUnitTests {
 	public void deveBuscarNoRepositorio(){
 		final Search search = new Search();
 		search.setId("1");
-		search.setCodigoCetip("CSMGA1");
+		search.setCodigo("CSMGA1");
 		search.setDescricao("xyz");
 
-		when(repository.findByCodigoCetip("CSMGA1")).thenReturn(search);
+		when(repository.findByCodigo("CSMGA1")).thenReturn(search);
 
-		final Search searchEncontrada = service.findByCodigoCetip("CSMGA1");
+		final Search searchEncontrada = service.findByCodigo("CSMGA1");
 
 		assertThat(searchEncontrada.getId()).isEqualTo("1");
 	}
