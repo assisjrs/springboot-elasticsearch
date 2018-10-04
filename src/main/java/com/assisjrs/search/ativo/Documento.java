@@ -9,7 +9,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 public class Documento {
     @Id
     private String id;
-    private String descricao;
-
     private String codigo;
+    private String descricao;
 }

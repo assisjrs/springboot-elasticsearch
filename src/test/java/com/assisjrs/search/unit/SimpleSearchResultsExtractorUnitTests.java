@@ -121,14 +121,14 @@ public class SimpleSearchResultsExtractorUnitTests {
     }
 
     @Test
-    public void deveRetornarTrazerAQuantidadeDeItensDoHighlightFields(){
+    public void deveRetornarTrazerOHighlightFields(){
         final SearchHits hits = mock(SearchHits.class);
         when(response.getHits()).thenReturn(hits);
 
         final SearchHit hit = mock(SearchHit.class);
         final Map<String, HighlightField> highlightFields = new HashMap<>();
 
-        highlightFields.put("descricao", new HighlightField("descricao", new Text[]{}));
+        highlightFields.put("descricao", new HighlightField("descricao", new Text[]{new Text("xxx <mark>ttt</mark>")}));
 
         when(hit.getHighlightFields()).thenReturn(highlightFields);
 

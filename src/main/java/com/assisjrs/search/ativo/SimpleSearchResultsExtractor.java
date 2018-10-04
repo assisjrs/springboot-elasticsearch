@@ -44,6 +44,13 @@ public class SimpleSearchResultsExtractor implements ResultsExtractor<ResultsRes
                         }
                     }
 
+                    final Documento documento = new Documento();
+                    documento.setId((String) hit.getSource().get("id"));
+                    documento.setCodigo((String) hit.getSource().get("codigo"));
+                    documento.setDescricao((String) hit.getSource().get("descricao"));
+
+                    resultSearch.setDocumento(documento);
+
                     results.getResults().add(resultSearch);
                 }
         }
