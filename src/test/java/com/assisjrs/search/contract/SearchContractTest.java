@@ -1,7 +1,7 @@
 package com.assisjrs.search.contract;
 
-import com.assisjrs.search.ativo.Search;
-import com.assisjrs.search.ativo.SearchRepository;
+import com.assisjrs.search.ativo.Documento;
+import com.assisjrs.search.ativo.DocumentoRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,21 +30,21 @@ public class SearchContractTest {
     private ElasticsearchTemplate template;
 
     @Autowired
-    private SearchRepository repository;
+    private DocumentoRepository repository;
 
     @Before
     public void before() {
-        template.deleteIndex(Search.class);
-        template.createIndex(Search.class);
-        template.putMapping(Search.class);
-        template.refresh(Search.class);
+        template.deleteIndex(Documento.class);
+        template.createIndex(Documento.class);
+        template.putMapping(Documento.class);
+        template.refresh(Documento.class);
 
-        final Search s = new Search();
-        s.setId("1");
-        s.setCodigo("ELPL4");
-        s.setDescricao("XYZ ELPL4 ABC");
+        final Documento documento = new Documento();
+        documento.setId("1");
+        documento.setCodigo("ELPL4");
+        documento.setDescricao("XYZ ELPL4 ABC");
 
-        repository.save(s);
+        repository.save(documento);
     }
 
     @Test
@@ -62,8 +62,8 @@ public class SearchContractTest {
                 given().contentType("application/json")
                         .body("{\"text\": \"NAO_TEM\"}")
                         .post(url("/search/"))
-                        .then()
-                        .extract().jsonPath().getString("results");
+               .then()
+               .extract().jsonPath().getString("results");
 
         assertThat(results).isNotEmpty();
     }
@@ -74,8 +74,8 @@ public class SearchContractTest {
                 given().contentType("application/json")
                         .body("{\"text\": \"NAO_TEM\"}")
                         .post(url("/search/"))
-                        .then()
-                        .extract().jsonPath().getBoolean("found");
+               .then()
+               .extract().jsonPath().getBoolean("found");
 
         assertThat(found).isFalse();
     }
@@ -96,7 +96,7 @@ public class SearchContractTest {
                        .body("{\"text\": \"ELPL4\"}")
                        .post(url("/search/"))
                .then()
-               .extract().jsonPath().getString("results[0].search.id");
+               .extract().jsonPath().getString("results[0].documento.id");
 
         assertThat(id).isEqualTo("1");
     }
@@ -108,7 +108,7 @@ public class SearchContractTest {
                        .body("{\"text\": \"ELPL4\"}")
                        .post(url("/search/"))
                 .then()
-                .extract().jsonPath().getString("results[0].search.codigo");
+                .extract().jsonPath().getString("results[0].documento.codigo");
 
         assertThat(codigo).isEqualTo("ELPL4");
     }
@@ -120,7 +120,7 @@ public class SearchContractTest {
                        .body("{\"text\": \"ELPL4\"}")
                        .post(url("/search/"))
                 .then()
-                .extract().jsonPath().getString("results[0].search.descricao");
+                .extract().jsonPath().getString("results[0].documento.descricao");
 
         assertThat(descricao).isEqualTo("XYZ ELPL4 ABC");
     }

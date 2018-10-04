@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SearchService {
+public class DocumentoService {
 
     @Autowired
-    private SearchRepository repository;
+    private DocumentoRepository repository;
 
-    public Search findByCodigo(String codigo) {
+    public Documento findByCodigo(final String codigo) {
         return repository.findByCodigo(codigo);
     }
 
-    public Search salvar(Search s) {
+    public Documento save(final Documento s) {
         return repository.save(s);
     }
 }

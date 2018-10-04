@@ -1,8 +1,8 @@
 package com.assisjrs.search.integration;
 
+import com.assisjrs.search.ativo.Documento;
 import com.assisjrs.search.ativo.ResultsResponse;
-import com.assisjrs.search.ativo.Search;
-import com.assisjrs.search.ativo.SearchRepository;
+import com.assisjrs.search.ativo.DocumentoRepository;
 import com.assisjrs.search.ativo.SimpleSearch;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,17 +22,17 @@ public class SimpleSearchIntegrationTests {
 	private ElasticsearchTemplate template;
 
 	@Autowired
-	private SearchRepository repository;
+	private DocumentoRepository repository;
 
 	@Autowired
 	private SimpleSearch search;
 
 	@Before
 	public void before() {
-		template.deleteIndex(Search.class);
-		template.createIndex(Search.class);
-		template.putMapping(Search.class);
-		template.refresh(Search.class);
+		template.deleteIndex(Documento.class);
+		template.createIndex(Documento.class);
+		template.putMapping(Documento.class);
+		template.refresh(Documento.class);
 	}
 
 	@Test
@@ -51,12 +51,12 @@ public class SimpleSearchIntegrationTests {
 
 	@Test
 	public void deveRetornarTook(){
-        final Search s = new Search();
-        s.setId("1");
-        s.setCodigo("ELPL4");
-        s.setDescricao("XYZ ELPL4 ABC");
+        final Documento documento = new Documento();
+        documento.setId("1");
+        documento.setCodigo("ELPL4");
+        documento.setDescricao("XYZ ELPL4 ABC");
 
-	    repository.save(s);
+	    repository.save(documento);
 
 		final ResultsResponse results = search.by("EPL4");
 

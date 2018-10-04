@@ -12,7 +12,7 @@ public class SearchResource {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
-    public ResultsResponse mainSearch(final @RequestBody SearchParams q){
+    public ResultsResponse search(final @RequestBody SearchParams q){
         return simpleSearch.by(q.getText());
     }
 }

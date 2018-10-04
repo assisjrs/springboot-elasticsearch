@@ -12,8 +12,7 @@ public class ResultSearch {
 
     private String titulo;
     private String descricao;
-
     private String highlight;
 
-    private Search search;
+    private Documento documento;
 }

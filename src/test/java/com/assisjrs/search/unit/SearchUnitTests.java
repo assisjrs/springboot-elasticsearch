@@ -1,8 +1,8 @@
 package com.assisjrs.search.unit;
 
-import com.assisjrs.search.ativo.SearchService;
-import com.assisjrs.search.ativo.Search;
-import com.assisjrs.search.ativo.SearchRepository;
+import com.assisjrs.search.ativo.Documento;
+import com.assisjrs.search.ativo.DocumentoService;
+import com.assisjrs.search.ativo.DocumentoRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,22 +16,22 @@ import static org.mockito.Mockito.when;
 public class SearchUnitTests {
 
 	@InjectMocks
-	private SearchService service;
+	private DocumentoService service;
 
 	@Mock
-	private SearchRepository repository;
+	private DocumentoRepository repository;
 
 	@Test
 	public void deveBuscarNoRepositorio(){
-		final Search search = new Search();
-		search.setId("1");
-		search.setCodigo("CSMGA1");
-		search.setDescricao("xyz");
+		final Documento documento = new Documento();
+		documento.setId("1");
+		documento.setCodigo("CSMGA1");
+		documento.setDescricao("xyz");
 
-		when(repository.findByCodigo("CSMGA1")).thenReturn(search);
+		when(repository.findByCodigo("CSMGA1")).thenReturn(documento);
 
-		final Search searchEncontrada = service.findByCodigo("CSMGA1");
+		final Documento documentoEncontrado = service.findByCodigo("CSMGA1");
 
-		assertThat(searchEncontrada.getId()).isEqualTo("1");
+		assertThat(documentoEncontrado.getId()).isEqualTo("1");
 	}
 }

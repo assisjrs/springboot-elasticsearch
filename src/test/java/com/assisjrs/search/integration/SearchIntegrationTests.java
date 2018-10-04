@@ -1,8 +1,8 @@
 package com.assisjrs.search.integration;
 
-import com.assisjrs.search.ativo.Search;
+import com.assisjrs.search.ativo.Documento;
 import com.assisjrs.search.ativo.SearchResultImpl;
-import com.assisjrs.search.ativo.SearchService;
+import com.assisjrs.search.ativo.DocumentoService;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.junit.Before;
@@ -39,64 +39,64 @@ public class SearchIntegrationTests {
 	private ElasticsearchTemplate template;
 
 	@Autowired
-	private SearchService service;
+	private DocumentoService service;
 
 	@Before
 	public void before() {
-		template.deleteIndex(Search.class);
-		template.createIndex(Search.class);
-		template.putMapping(Search.class);
-		template.refresh(Search.class);
+		template.deleteIndex(Documento.class);
+		template.createIndex(Documento.class);
+		template.putMapping(Documento.class);
+		template.refresh(Documento.class);
 	}
 
 	@Test
 	public void deveRetornarNullQuandoSemResultados(){
-        final Search search = service.findByCodigo("NAO_EXISTE");
+        final Documento documento = service.findByCodigo("NAO_EXISTE");
 
-        assertThat(search).isNull();
+        assertThat(documento).isNull();
     }
 
     @Test
     public void deveSalvarUmItem(){
-	    final Search s = new Search();
+	    final Documento documento = new Documento();
 
-	    s.setId("666");
-	    s.setCodigo("ELPLA1");
-	    s.setDescricao("xyz");
+	    documento.setId("666");
+	    documento.setCodigo("ELPLA1");
+	    documento.setDescricao("xyz");
 
 
-        final Search found = service.salvar(s);
+        final Documento found = service.save(documento);
 
         assertThat(found.getId()).isEqualTo("666");
     }
 
     @Test
     public void deveBuscarPeloCodigoCetip(){
-        final Search s = new Search();
+        final Documento documento = new Documento();
 
-        s.setId("333");
-        s.setCodigo("ELPLA1");
-        s.setDescricao("xyz");
+        documento.setId("333");
+        documento.setCodigo("ELPLA1");
+        documento.setDescricao("xyz");
 
-        service.salvar(s);
+        service.save(documento);
 
-        final Search found = service.findByCodigo("ELPLA1");
+        final Documento found = service.findByCodigo("ELPLA1");
 
         assertThat(found.getCodigo()).isEqualTo("ELPLA1");
     }
 
     @Test
     public void exemploScroll(){
-        final Search s = new Search();
+        final Documento documento = new Documento();
 
-        s.setId(randomNumeric(5));
-        s.setCodigo("ELPLA1");
-        s.setDescricao("some test message");
+        documento.setId(randomNumeric(5));
+        documento.setCodigo("ELPLA1");
+        documento.setDescricao("some test message");
 
-        final IndexQuery indexQuery = getIndexQuery(s);
+        final IndexQuery indexQuery = getIndexQuery(documento);
 
         template.index(indexQuery);
-        template.refresh(Search.class);
+        template.refresh(Documento.class);
 
         final SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(matchQuery("descricao", "test"))
@@ -106,12 +106,12 @@ public class SearchIntegrationTests {
                 .build();
 
         final String scrollId = template.scan(searchQuery,1000,false);
-        final List<Search> searches = new ArrayList<>();
+        final List<Documento> searches = new ArrayList<>();
 
         boolean hasRecords = true;
 
         while (hasRecords) {
-            final Page<Search> page = template.scroll(scrollId, 5000L, new SearchResultImpl());
+            final Page<Documento> page = template.scroll(scrollId, 5000L, new SearchResultImpl());
 
             if(page != null) {
                 searches.addAll(page.getContent());
@@ -127,17 +127,17 @@ public class SearchIntegrationTests {
 
     @Test
     public void exemploBuscaHighLightDescricaoNormal(){
-        final Search s = new Search();
+        final Documento documento = new Documento();
 
-        s.setId(randomNumeric(5));
-        s.setCodigo("ELPLA1");
-        s.setDescricao("some test message");
+        documento.setId(randomNumeric(5));
+        documento.setCodigo("ELPLA1");
+        documento.setDescricao("some test message");
 
-        final IndexQuery indexQuery = getIndexQuery(s);
+        final IndexQuery indexQuery = getIndexQuery(documento);
 
         template.index(indexQuery);
-        template.refresh(Search.class);
-        service.salvar(s);
+        template.refresh(Documento.class);
+        service.save(documento);
 
         final SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(matchQuery("descricao", "test"))
@@ -149,24 +149,24 @@ public class SearchIntegrationTests {
                         .postTags("</mark>"))
                 .build();
 
-        final Page<Search> page = template.queryForPage(searchQuery, Search.class, new SearchResultImpl());
+        final Page<Documento> page = template.queryForPage(searchQuery, Documento.class, new SearchResultImpl());
 
         assertThat(page.getContent().get(0).getDescricao()).hasToString("some test message");
     }
 
     @Test
     public void exemploBuscaHighLight(){
-        final Search s = new Search();
+        final Documento documento = new Documento();
 
-        s.setId(randomNumeric(5));
-        s.setCodigo("ELPLA1");
-        s.setDescricao("some test message");
+        documento.setId(randomNumeric(5));
+        documento.setCodigo("ELPLA1");
+        documento.setDescricao("some test message");
 
-        final IndexQuery indexQuery = getIndexQuery(s);
+        final IndexQuery indexQuery = getIndexQuery(documento);
 
         template.index(indexQuery);
-        template.refresh(Search.class);
-        service.salvar(s);
+        template.refresh(Documento.class);
+        service.save(documento);
 
         final SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(matchQuery("descricao", "test"))
@@ -178,35 +178,34 @@ public class SearchIntegrationTests {
                         .postTags("</mark>"))
                 .build();
 
-        final Page<Search> page = template.queryForPage(searchQuery, Search.class, new SearchResultMapper() {
+        final Page<Documento> page = template.queryForPage(searchQuery, Documento.class, new SearchResultMapper() {
             @Override
             public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
-                final List<Search> searches = new ArrayList<>();
+                final List<Documento> documentos = new ArrayList<>();
 
                 for (final SearchHit hit : response.getHits()) {
                     if (response.getHits().getHits().length <= 0) return null;
 
-                    final Search search = new Search();
+                    final Documento doc = new Documento();
 
-                    search.setId(hit.getId());
-                    search.setCodigo((String)hit.getSource().get("codigo"));
-                    search.setDescricao(hit.getHighlightFields().get("descricao").fragments()[0].toString());
-                    searches.add(search);
+                    doc.setId(hit.getId());
+                    doc.setCodigo((String)hit.getSource().get("codigo"));
+                    doc.setDescricao(hit.getHighlightFields().get("descricao").fragments()[0].toString());
+                    documentos.add(doc);
                 }
 
-                return new AggregatedPageImpl(searches);
+                return new AggregatedPageImpl(documentos);
             }
         });
 
         assertThat(page.getContent().get(0).getDescricao()).hasToString("some <mark>test</mark> message");
     }
 
-    private IndexQuery getIndexQuery(Search sampleEntity) {
+    private IndexQuery getIndexQuery(Documento sampleEntity) {
         return new IndexQueryBuilder()
                 .withId(sampleEntity.getId())
                 .withObject(sampleEntity)
                 //.withVersion(sampleEntity.getVersion())
                 .build();
     }
-
 }

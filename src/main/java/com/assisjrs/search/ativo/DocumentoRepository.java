@@ -4,6 +4,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SearchRepository extends ElasticsearchRepository<Search, String> {
-    Search findByCodigo(String codigo);
+public interface DocumentoRepository extends ElasticsearchRepository<Documento, String> {
+    Documento findByCodigo(String codigo);
 }

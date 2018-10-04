@@ -1,6 +1,6 @@
 package com.assisjrs.search.integration;
 
-import com.assisjrs.search.ativo.Search;
+import com.assisjrs.search.ativo.Documento;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +20,10 @@ public class SeriesIntegrationTests {
 
 	@Before
 	public void before() {
-		template.deleteIndex(Search.class);
-		template.createIndex(Search.class);
-		template.putMapping(Search.class);
-		template.refresh(Search.class);
+		template.deleteIndex(Documento.class);
+		template.createIndex(Documento.class);
+		template.putMapping(Documento.class);
+		template.refresh(Documento.class);
 	}
 
 	@Test
