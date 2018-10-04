@@ -20,9 +20,7 @@ public class SimpleSearch {
     public ResultsResponse by(final String q) {
         final SearchQuery query = new NativeSearchQueryBuilder()
                                                     .withQuery(matchQuery("descricao", q))
-                                                    .withHighlightFields(new HighlightBuilder.Field("descricao")
-                                                                                             .preTags("<mark>")
-                                                                                             .postTags("</mark>"))
+                                                    .withHighlightFields(new HighlightBuilder.Field("descricao"))
                                                     .build();
 
         return template.query(query, resultsExtractor);

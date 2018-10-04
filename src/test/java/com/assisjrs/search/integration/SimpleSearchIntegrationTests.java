@@ -58,7 +58,7 @@ public class SimpleSearchIntegrationTests {
 
 	    repository.save(documento);
 
-		final ResultsResponse results = search.by("EPL4");
+		final ResultsResponse results = search.by("ELPL4");
 
 		assertThat(results.getTook()).isNotNull();
 	}
@@ -79,9 +79,9 @@ public class SimpleSearchIntegrationTests {
 
         repository.save(documento2);
 
-        final ResultsResponse results = search.by("EPL4");
+        final ResultsResponse results = search.by("ELPL4");
 
-        assertThat(results.getResults().size()).isEqualTo(1);
+        assertThat(results.getResults().size()).isEqualTo(2);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class SimpleSearchIntegrationTests {
 
         repository.save(documento);
 
-        final ResultsResponse results = search.by("EPL4");
+        final ResultsResponse results = search.by("ELPL4");
 
         assertThat(results.getResults().get(0).getDocumento()).isNotNull();
     }
