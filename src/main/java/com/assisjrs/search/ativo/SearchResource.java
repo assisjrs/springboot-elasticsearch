@@ -1,27 +1,18 @@
 package com.assisjrs.search.ativo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/search/")
 public class SearchResource {
+    @Autowired
+    private SimpleSearch simpleSearch;
+
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
     public ResultsResponse mainSearch(final @RequestBody SearchParams q){
-        final ResultsResponse response = new ResultsResponse();
-
-        if ("NAO_TEM".equals(q.getText()))
-            return response;
-
-        final Search search = new Search();
-
-        search.setId("1");
-        search.setCodigo("CSMGA1");
-        search.setDescricao("xyz");
-
-        response.getResults().add(new ResultSearch(null, null, null, null, search));
-
-        return response;
+        return simpleSearch.by(q.getText());
     }
 }

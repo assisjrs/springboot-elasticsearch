@@ -117,7 +117,7 @@ public class SimpleSearchResultsExtractorUnitTests {
 
         final ResultsResponse resultSearch = resultsExtractor.extract(response);
 
-        assertThat(resultSearch.getResults().get(0).getHighlightFields()).isNotNull();
+        assertThat(resultSearch.getResults().get(0).getHighlight()).isNotNull();
     }
 
     @Test
@@ -128,7 +128,7 @@ public class SimpleSearchResultsExtractorUnitTests {
         final SearchHit hit = mock(SearchHit.class);
         final Map<String, HighlightField> highlightFields = new HashMap<>();
 
-        highlightFields.put("campo01", new HighlightField("campo01", new Text[]{}));
+        highlightFields.put("descricao", new HighlightField("descricao", new Text[]{}));
 
         when(hit.getHighlightFields()).thenReturn(highlightFields);
 
@@ -137,7 +137,7 @@ public class SimpleSearchResultsExtractorUnitTests {
 
         final ResultsResponse resultSearch = resultsExtractor.extract(response);
 
-        assertThat(resultSearch.getResults().get(0).getHighlightFields()).isEqualTo(highlightFields);
+        assertThat(resultSearch.getResults().get(0).getHighlight()).isEqualTo("xxx <mark>ttt</mark>");
     }
 
     @Test

@@ -1,9 +1,14 @@
 package com.assisjrs.search.contract;
 
+import com.assisjrs.search.ativo.Search;
+import com.assisjrs.search.ativo.SearchRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.jayway.restassured.RestAssured.given;
@@ -19,6 +24,27 @@ public class SearchContractTest {
 
     protected String url(final String context){
         return "http://localhost:" + port + context;
+    }
+
+    @Autowired
+    private ElasticsearchTemplate template;
+
+    @Autowired
+    private SearchRepository repository;
+
+    @Before
+    public void before() {
+        template.deleteIndex(Search.class);
+        template.createIndex(Search.class);
+        template.putMapping(Search.class);
+        template.refresh(Search.class);
+
+        final Search s = new Search();
+        s.setId("1");
+        s.setCodigo("ELPL4");
+        s.setDescricao("XYZ ELPL4 ABC");
+
+        repository.save(s);
     }
 
     @Test
@@ -57,7 +83,7 @@ public class SearchContractTest {
     @Test
     public void deveRetornar200QuandoExistir() {
         given().contentType("application/json")
-               .body("{\"text\": \"CSMGA1\"}")
+               .body("{\"text\": \"ELPL4\"}")
                .post(url("/search/"))
        .then()
        .statusCode(OK.value());
@@ -67,7 +93,7 @@ public class SearchContractTest {
     public void deveRetornarOId() {
         final String id =
                 given().contentType("application/json")
-                       .body("{\"text\": \"CSMGA1\"}")
+                       .body("{\"text\": \"ELPL4\"}")
                        .post(url("/search/"))
                .then()
                .extract().jsonPath().getString("results[0].search.id");
@@ -76,26 +102,26 @@ public class SearchContractTest {
     }
 
     @Test
-    public void deveRetornarOCodigoCetip() {
-        final String codigoCetip =
+    public void deveRetornarOCodigo() {
+        final String codigo =
                 given().contentType("application/json")
-                       .body("{\"text\": \"CSMGA1\"}")
+                       .body("{\"text\": \"ELPL4\"}")
                        .post(url("/search/"))
                 .then()
                 .extract().jsonPath().getString("results[0].search.codigo");
 
-        assertThat(codigoCetip).isEqualTo("CSMGA1");
+        assertThat(codigo).isEqualTo("ELPL4");
     }
 
     @Test
     public void deveRetornarADescricao() {
         final String descricao =
                 given().contentType("application/json")
-                       .body("{\"text\": \"CSMGA1\"}")
+                       .body("{\"text\": \"ELPL4\"}")
                        .post(url("/search/"))
                 .then()
                 .extract().jsonPath().getString("results[0].search.descricao");
 
-        assertThat(descricao).isEqualTo("xyz");
+        assertThat(descricao).isEqualTo("XYZ ELPL4 ABC");
     }
 }

@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SimpleSearchByDescricaoIntegrationTests {
+public class SimpleSearchIntegrationTests {
 
 	@Autowired
 	private ElasticsearchTemplate template;
@@ -52,6 +52,7 @@ public class SimpleSearchByDescricaoIntegrationTests {
 	@Test
 	public void deveRetornarTook(){
         final Search s = new Search();
+        s.setId("1");
         s.setCodigo("ELPL4");
         s.setDescricao("XYZ ELPL4 ABC");
 
@@ -59,6 +60,6 @@ public class SimpleSearchByDescricaoIntegrationTests {
 
 		final ResultsResponse results = search.by("EPL4");
 
-		assertThat(results.getTook()).isEqualTo(1L);
+		assertThat(results.getTook()).isNotNull();
 	}
 }

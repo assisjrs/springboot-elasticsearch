@@ -1,10 +1,14 @@
 package com.assisjrs.search.ativo;
 
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.highlight.HighlightField;
 import org.springframework.data.elasticsearch.core.ResultsExtractor;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class SimpleSearchResultsExtractor implements ResultsExtractor<ResultsResponse> {
@@ -28,7 +32,17 @@ public class SimpleSearchResultsExtractor implements ResultsExtractor<ResultsRes
                     final ResultSearch resultSearch = new ResultSearch();
 
                     resultSearch.setScore(hit.getScore());
-                    resultSearch.setHighlightFields(hit.getHighlightFields());
+                    resultSearch.setDescricao(hit.getSourceAsString());
+
+                    final Map<String, HighlightField> highlightFields = hit.getHighlightFields();
+                    final HighlightField field = highlightFields.get("descricao");
+                    resultSearch.setHighlight("");
+
+                    if(field != null) {
+                        for (final Text fragment : field.getFragments()) {
+                            resultSearch.setHighlight(fragment.string());
+                        }
+                    }
 
                     results.getResults().add(resultSearch);
                 }
