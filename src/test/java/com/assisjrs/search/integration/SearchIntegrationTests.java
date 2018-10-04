@@ -49,42 +49,6 @@ public class SearchIntegrationTests {
 		template.refresh(Documento.class);
 	}
 
-	@Test
-	public void deveRetornarNullQuandoSemResultados(){
-        final Documento documento = service.findByCodigo("NAO_EXISTE");
-
-        assertThat(documento).isNull();
-    }
-
-    @Test
-    public void deveSalvarUmItem(){
-	    final Documento documento = new Documento();
-
-	    documento.setId("666");
-	    documento.setCodigo("ELPLA1");
-	    documento.setDescricao("xyz");
-
-
-        final Documento found = service.save(documento);
-
-        assertThat(found.getId()).isEqualTo("666");
-    }
-
-    @Test
-    public void deveBuscarPeloCodigoCetip(){
-        final Documento documento = new Documento();
-
-        documento.setId("333");
-        documento.setCodigo("ELPLA1");
-        documento.setDescricao("xyz");
-
-        service.save(documento);
-
-        final Documento found = service.findByCodigo("ELPLA1");
-
-        assertThat(found.getCodigo()).isEqualTo("ELPLA1");
-    }
-
     @Test
     public void exemploScroll(){
         final Documento documento = new Documento();
